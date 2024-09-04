@@ -24,7 +24,7 @@ class SnakeGame():
             self.squares = []
             self.eyes = []
 
-            for _ in range(0, BODY_PARTS):
+            for _ in range(0, self.bodySize):
                 self.coordinates.append([XSTART, YSTART])
 
             for x, y in self.coordinates:
