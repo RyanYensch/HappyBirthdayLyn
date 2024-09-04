@@ -108,15 +108,17 @@ class SnakeGame():
         square = canvas.create_rectangle(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=SNAKE_COLOUR, tag="snake")
         snake.squares.insert(0,square)
 
-        del snake.coordinates[-1]
-
+        
         if x == food.coordinates[0] and y == food.coordinates[1]:
             self.score += 1
             self.label.config(text= "Score: {}".format(self.score))
-            
+            canvas.delete("food")
 
-        canvas.delete(snake.squares[-1])
-        del snake.squares[-1]
+            food = self.Food()
+        else:
+            del snake.coordinates[-1]
+            canvas.delete(snake.squares[-1])
+            del snake.squares[-1]
 
         self.game_window.after(DELAY, self.nextTurn, snake, food)
 
