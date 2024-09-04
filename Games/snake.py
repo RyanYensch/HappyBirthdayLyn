@@ -12,6 +12,7 @@ HEADER_COLOUR = "#ff809d"
 BACKGROUND_COLOUR = "#FFD1DC"
 XSTART = 0
 YSTART = 0
+REQUIRED_SCORE = 5
 
 canvas = None
 
@@ -51,6 +52,11 @@ class SnakeGame():
         self.food = None
         self.score = 0
         self.direction = 'right'
+
+    def got_required_score(self):
+        if self.score >= REQUIRED_SCORE:
+            return True
+        return False
             
 
     def game_start(self):
@@ -70,7 +76,9 @@ class SnakeGame():
         back_button.pack(side = "right", pady=10, padx=10)
 
         global canvas
-        canvas = Canvas(self.game_window, height=GAME_HEIGHT, width=GAME_WIDTH, bg = BACKGROUND_COLOUR, highlightbackground="black", highlightthickness=4)
+        canvas = Canvas(self.game_window, height=GAME_HEIGHT, width=GAME_WIDTH,
+                        bg = BACKGROUND_COLOUR,
+                        highlightbackground="black", highlightthickness=4)
         canvas.pack()
 
         self.game_window.update()
@@ -101,7 +109,7 @@ class SnakeGame():
         self.next_turn(self.snake, self.food)
 
         return self.game_window
-    
+
     def next_turn(self, snake, food):
         x,y = snake.coordinates[0]
 
@@ -192,15 +200,19 @@ class SnakeGame():
             return True
         elif y < 0 or y >= GAME_HEIGHT:
             return True
-        
+
         for body_part in snake.coordinates[1:]:
             if x == body_part[0] and y == body_part[1]:
                 return True
-            
+      
         return False
 
     def game_over(self) -> None:
         canvas.delete(ALL)
-        canvas.create_text(canvas.winfo_width()/2, canvas.winfo_height()/2, font = ('consolas', 70, "bold"), text= "GAME OVER", fill="red", tag="game over")
-
-
+        canvas.create_text(canvas.winfo_width()/2, canvas.winfo_height()/2,
+                           font = ('consolas', 70, "bold"),
+                           text= "GAME OVER", fill="red", tag="game over")
+        if self.score >= REQUIRED_SCORE:
+            canvas.create_text(canvas.winfo_width()/2, 2*canvas.winfo_height()/3,
+                               font = ('consolas',25),
+                               text="YOU MET THE REQUIRED SCORE\nCONGRATS", fill="red", tag="done")
