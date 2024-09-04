@@ -22,6 +22,7 @@ class SnakeGame():
             self.bodySize = BODY_PARTS
             self.coordinates = []
             self.squares = []
+            self.eyes = []
 
             for _ in range(0, BODY_PARTS):
                 self.coordinates.append([XSTART, YSTART])
@@ -105,8 +106,27 @@ class SnakeGame():
 
 
         snake.coordinates.insert(0, (x, y))
+        canvas.delete("eyes")
+        snake.eyes = []
         square = canvas.create_rectangle(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=SNAKE_COLOUR, tag="snake")
         snake.squares.insert(0,square)
+        if self.direction == 'up':
+            eye1 = canvas.create_oval(x+int(SPACE_SIZE/4),y+int(SPACE_SIZE/4), x+(SPACE_SIZE/3), y+(SPACE_SIZE/3), fill="green", tag = "eyes")
+            eye2 = canvas.create_oval(x+int(3*SPACE_SIZE/4),y+int(SPACE_SIZE/4), x+(2*SPACE_SIZE/3), y+(SPACE_SIZE/3), fill="green", tag = "eyes")
+            snake.eyes.append([eye1, eye2])
+        elif self.direction == 'down':
+            eye1 = canvas.create_oval(x+int(SPACE_SIZE/4),y+int(3*SPACE_SIZE/4), x+(SPACE_SIZE/3), y+(2*SPACE_SIZE/3), fill="green", tag = "eyes")
+            eye2 = canvas.create_oval(x+int(3*SPACE_SIZE/4),y+int(3*SPACE_SIZE/4), x+(2*SPACE_SIZE/3), y+(2*SPACE_SIZE/3), fill="green", tag = "eyes")
+            snake.eyes.append([eye1, eye2])
+        elif self.direction == 'left':
+            eye1 = canvas.create_oval(x+int(SPACE_SIZE/4),y+int(SPACE_SIZE/4), x+(SPACE_SIZE/3), y+(SPACE_SIZE/3), fill="green", tag = "eyes")
+            eye2 = canvas.create_oval(x+int(SPACE_SIZE/4),y+int(3*SPACE_SIZE/4), x+(SPACE_SIZE/3), y+(2*SPACE_SIZE/3), fill="green", tag = "eyes")
+            snake.eyes.append([eye1, eye2])
+        elif self.direction == 'right':
+            eye1 = canvas.create_oval(x+int(3*SPACE_SIZE/4),y+int(SPACE_SIZE/4), x+(2*SPACE_SIZE/3), y+(SPACE_SIZE/3), fill="green", tag = "eyes")
+            eye2 = canvas.create_oval(x+int(3*SPACE_SIZE/4),y+int(3*SPACE_SIZE/4), x+(2*SPACE_SIZE/3), y+(2*SPACE_SIZE/3), fill="green", tag = "eyes")
+            snake.eyes.append([eye1, eye2])
+        
 
         
         if x == food.coordinates[0] and y == food.coordinates[1]:
