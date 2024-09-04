@@ -38,7 +38,10 @@ class SnakeGame():
             y = random.randint(0, (GAME_HEIGHT/SPACE_SIZE) - 1) * SPACE_SIZE
 
             self.coordinates = [x,y]
-            canvas.create_oval(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=FOOD_COLOUR, tag="food")
+
+            image = PhotoImage(file= "Images/orangeKitty.png")
+            canvas.create_image(x, y, image=image, anchor="nw", tag="food")
+            canvas.image = image
             
 
     def gameStart(self):
