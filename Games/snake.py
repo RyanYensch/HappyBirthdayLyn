@@ -110,22 +110,27 @@ class SnakeGame():
         snake.eyes = []
         square = canvas.create_rectangle(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=SNAKE_COLOUR, tag="snake")
         snake.squares.insert(0,square)
+
+        heart_emoji = "❤︎"
+        heart_color = "pink"
+
         if self.direction == 'up':
-            eye1 = canvas.create_oval(x+int(SPACE_SIZE/4),y+int(SPACE_SIZE/4), x+(SPACE_SIZE/3), y+(SPACE_SIZE/3), fill="green", tag = "eyes")
-            eye2 = canvas.create_oval(x+int(3*SPACE_SIZE/4),y+int(SPACE_SIZE/4), x+(2*SPACE_SIZE/3), y+(SPACE_SIZE/3), fill="green", tag = "eyes")
+            eye1 = canvas.create_text(x + int(SPACE_SIZE / 4), y + int(SPACE_SIZE / 4), text=heart_emoji, font=("Helvetica", 24), fill=heart_color, tag="eyes")
+            eye2 = canvas.create_text(x + int(3 * SPACE_SIZE / 4), y + int(SPACE_SIZE / 4), text=heart_emoji, font=("Helvetica", 24), fill=heart_color, tag="eyes")
             snake.eyes.append([eye1, eye2])
         elif self.direction == 'down':
-            eye1 = canvas.create_oval(x+int(SPACE_SIZE/4),y+int(3*SPACE_SIZE/4), x+(SPACE_SIZE/3), y+(2*SPACE_SIZE/3), fill="green", tag = "eyes")
-            eye2 = canvas.create_oval(x+int(3*SPACE_SIZE/4),y+int(3*SPACE_SIZE/4), x+(2*SPACE_SIZE/3), y+(2*SPACE_SIZE/3), fill="green", tag = "eyes")
+            eye1 = canvas.create_text(x + int(SPACE_SIZE / 4), y + int(3 * SPACE_SIZE / 4), text=heart_emoji, font=("Helvetica", 24), fill=heart_color, tag="eyes")
+            eye2 = canvas.create_text(x + int(3 * SPACE_SIZE / 4), y + int(3 * SPACE_SIZE / 4), text=heart_emoji, font=("Helvetica", 24), fill=heart_color, tag="eyes")
             snake.eyes.append([eye1, eye2])
         elif self.direction == 'left':
-            eye1 = canvas.create_oval(x+int(SPACE_SIZE/4),y+int(SPACE_SIZE/4), x+(SPACE_SIZE/3), y+(SPACE_SIZE/3), fill="green", tag = "eyes")
-            eye2 = canvas.create_oval(x+int(SPACE_SIZE/4),y+int(3*SPACE_SIZE/4), x+(SPACE_SIZE/3), y+(2*SPACE_SIZE/3), fill="green", tag = "eyes")
+            eye1 = canvas.create_text(x + int(SPACE_SIZE / 4), y + int(SPACE_SIZE / 4), text=heart_emoji, font=("Helvetica", 24), fill=heart_color, tag="eyes")
+            eye2 = canvas.create_text(x + int(SPACE_SIZE / 4), y + int(3 * SPACE_SIZE / 4), text=heart_emoji, font=("Helvetica", 24), fill=heart_color, tag="eyes")
             snake.eyes.append([eye1, eye2])
         elif self.direction == 'right':
-            eye1 = canvas.create_oval(x+int(3*SPACE_SIZE/4),y+int(SPACE_SIZE/4), x+(2*SPACE_SIZE/3), y+(SPACE_SIZE/3), fill="green", tag = "eyes")
-            eye2 = canvas.create_oval(x+int(3*SPACE_SIZE/4),y+int(3*SPACE_SIZE/4), x+(2*SPACE_SIZE/3), y+(2*SPACE_SIZE/3), fill="green", tag = "eyes")
+            eye1 = canvas.create_text(x + int(3 * SPACE_SIZE / 4), y + int(SPACE_SIZE / 4), text=heart_emoji, font=("Helvetica", 24), fill=heart_color, tag="eyes")
+            eye2 = canvas.create_text(x + int(3 * SPACE_SIZE / 4), y + int(3 * SPACE_SIZE / 4), text=heart_emoji, font=("Helvetica", 24), fill=heart_color, tag="eyes")
             snake.eyes.append([eye1, eye2])
+
         
 
         
