@@ -5,7 +5,7 @@ GAME_WIDTH = 700
 GAME_HEIGHT = 700
 DELAY = 100
 SPACE_SIZE = 50
-BODY_PARTS = 3
+BODY_PARTS = 196
 SNAKE_COLOUR = "purple"
 FOOD_COLOUR = "red"
 HEADER_COLOUR = "#ff809d"
@@ -15,6 +15,7 @@ YSTART = 0
 REQUIRED_SCORE = 5
 
 canvas = None
+used_coords = []
 
 class SnakeGame():
 
@@ -28,6 +29,9 @@ class SnakeGame():
             for _ in range(0, self.bodySize):
                 self.coordinates.append([XSTART, YSTART])
 
+            global used_coords
+            used_coords = self.coordinates
+
             for x, y in self.coordinates:
                 square = canvas.create_rectangle(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=SNAKE_COLOUR, tag="snake")
                 self.squares.append(square)
@@ -35,8 +39,16 @@ class SnakeGame():
 
     class Food():
         def __init__(self):
-            x = random.randint(0, (GAME_WIDTH/SPACE_SIZE) - 1) * SPACE_SIZE
-            y = random.randint(0, (GAME_HEIGHT/SPACE_SIZE) - 1) * SPACE_SIZE
+            occupied = True
+
+            while occupied:
+                occupied = False
+                x = random.randint(0, (GAME_WIDTH/SPACE_SIZE) - 1) * SPACE_SIZE
+                y = random.randint(0, (GAME_HEIGHT/SPACE_SIZE) - 1) * SPACE_SIZE
+
+                for xcoord, ycoord in used_coords:
+                    if x == xcoord and y == ycoord:
+                        occupied = True
 
             self.coordinates = [x,y]
 
@@ -178,6 +190,8 @@ class SnakeGame():
             canvas.delete(snake.squares[-1])
             del snake.squares[-1]
 
+        global used_coords
+        used_coords = snake.coordinates
 
         if self.check_collision(self.snake):
             self.game_over()
