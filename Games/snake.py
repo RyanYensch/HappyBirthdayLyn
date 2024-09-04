@@ -120,7 +120,11 @@ class SnakeGame():
             canvas.delete(snake.squares[-1])
             del snake.squares[-1]
 
-        self.game_window.after(DELAY, self.nextTurn, snake, food)
+
+        if self.checkCollision(self.snake):
+            self.gameOver()
+        else:
+            self.game_window.after(DELAY, self.nextTurn, snake, food)
 
     def changeDirection(self, newDirection):
         if newDirection == 'left' and self.direction != 'right':
@@ -132,8 +136,18 @@ class SnakeGame():
         elif newDirection == 'down' and self.direction != 'up':
             self.direction = newDirection
 
-    def checkCollision(self):
-        pass
+    def checkCollision(self, snake):
+        x, y = snake.coordinates[0]
+        if x < 0 or x >= GAME_WIDTH:
+            return True
+        elif y < 0 or y >= GAME_HEIGHT:
+            return True
+        
+        for bodyPart in snake.coordinates[1:]:
+            if x == bodyPart[0] and y == bodyPart[1]:
+                return True
+            
+        return False
 
     def gameOver(self):
         pass
