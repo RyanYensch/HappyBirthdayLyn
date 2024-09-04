@@ -1,5 +1,4 @@
 import tkinter as tk
-import sys
 from Games.snake import *
 
 BACKGROUND_COLOUR = "#FFD1DC"
@@ -8,6 +7,7 @@ def startSnake():
     window.withdraw()
     game = Snake()
     game_window = game.gameStart()
+    game.nextTurn()
     window.wait_window(game_window)
     window.deiconify()
 
