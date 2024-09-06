@@ -10,6 +10,9 @@ class SlideGame():
     def __init__(self):
         self.game_window = None
         self.has_beaten = False
+        self.tiles = []
+        self.coords = []
+
 
     def game_start(self):
         self.game_window = Toplevel()
@@ -25,7 +28,7 @@ class SlideGame():
                         highlightbackground="black", highlightthickness=4)
         canvas.pack()
 
-
+        self.inititalise_tiles()
         self.game_window.update()
 
         window_height = self.game_window.winfo_height()
@@ -38,3 +41,8 @@ class SlideGame():
         self.game_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
 
         return self.game_window
+    
+    def inititalise_tiles(self):
+        for x in range(0,5):
+            for y in range(0,5):
+                canvas.create_rectangle(x*PIXELSPERTILEROW,y*PIXELSPERTILEROW, x*PIXELSPERTILEROW+PIXELSPERTILEROW, y*PIXELSPERTILEROW+PIXELSPERTILEROW)
