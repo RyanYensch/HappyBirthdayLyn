@@ -12,6 +12,7 @@ class SlideGame():
         self.has_beaten = False
         self.tiles = []
         self.coords = []
+        self.images = []
 
 
     def game_start(self):
@@ -43,6 +44,11 @@ class SlideGame():
         return self.game_window
     
     def inititalise_tiles(self):
-        for x in range(0,5):
-            for y in range(0,5):
-                canvas.create_rectangle(x*PIXELSPERTILEROW,y*PIXELSPERTILEROW, x*PIXELSPERTILEROW+PIXELSPERTILEROW, y*PIXELSPERTILEROW+PIXELSPERTILEROW)
+        for y in range(0,5):
+            row = []
+            for x in range(0,5):
+                num = 25-(y*5 + x)
+                row.append(PhotoImage(file= f"Images/SlideGameImages/{num}.png"))
+                canvas.create_image(x*PIXELSPERTILEROW,y*PIXELSPERTILEROW, image=row[x], anchor="nw")
+                canvas.image = row[x]
+            self.images.append(row)
