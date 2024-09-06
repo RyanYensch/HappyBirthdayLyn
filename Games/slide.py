@@ -3,9 +3,10 @@ from tkinter import *
 HEADER_COLOUR = "#ff809d"
 BACKGROUND_COLOUR = "#FFD1DC"
 
-class slideGame():
+class SlideGame():
     def __init__(self):
         self.game_window = None
+        self.has_beaten = False
 
     def game_start(self):
         self.game_window = Toplevel()
@@ -26,3 +27,5 @@ class slideGame():
         y = int((screen_height/2) - (window_height/2))
 
         self.game_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
+
+        return self.game_window
