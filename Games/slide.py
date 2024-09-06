@@ -1,4 +1,5 @@
 from tkinter import *
+import time
 
 HEADER_COLOUR = "#ff809d"
 BACKGROUND_COLOUR = "#FFD1DC"
@@ -10,8 +11,8 @@ class SlideGame():
     def __init__(self):
         self.game_window = None
         self.has_beaten = False
-        self.tiles = []
-        self.coords = []
+        self.tiles = [["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""]]
+        self.blanktilecoords = []
         self.images = []
 
 
@@ -41,14 +42,38 @@ class SlideGame():
 
         self.game_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
 
+        self.play_game()
+        
         return self.game_window
     
+    
+    def play_game(self):
+        self.blanktilecoords = canvas.coords(self.tiles[0][4])
+        self.remove_tile(0, 4)
+
     def inititalise_tiles(self):
         for y in range(0,5):
             row = []
             for x in range(0,5):
                 num = 25-(y*5 + x)
                 row.append(PhotoImage(file= f"Images/SlideGameImages/{num}.png"))
-                canvas.create_image(x*PIXELSPERTILEROW,y*PIXELSPERTILEROW, image=row[x], anchor="nw")
+                self.tiles[y][x] = (canvas.create_image(x*PIXELSPERTILEROW,y*PIXELSPERTILEROW, image=row[x], anchor="nw"))
+                canvas.tag_bind(self.tiles[y][x], '<Button-1>', lambda event, id=self.tiles[y][x]: self.on_image_click(event, id))
+
+                canvas.create_rectangle(x*PIXELSPERTILEROW,y*PIXELSPERTILEROW,x*PIXELSPERTILEROW+PIXELSPERTILEROW,y*PIXELSPERTILEROW+PIXELSPERTILEROW)
                 canvas.image = row[x]
             self.images.append(row)
+
+    def remove_tile(self, row, col):
+        canvas.delete(self.tiles[row][col])
+
+    def swap_tiles(self, row, col, image_id):
+        if abs(self.blanktilecoords[0]/PIXELSPERTILEROW - row) + abs(self.blanktilecoords[1]/PIXELSPERTILEROW - col) == 1:
+            coords = canvas.coords(image_id)
+            canvas.coords(image_id, self.blanktilecoords[0], self.blanktilecoords[1])
+            self.blanktilecoords = coords
+
+
+    def on_image_click(self, event, image_id):
+        coords = canvas.coords(image_id)
+        self.swap_tiles(coords[0]/PIXELSPERTILEROW, coords[1]/PIXELSPERTILEROW, image_id)
