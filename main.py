@@ -1,8 +1,9 @@
 from tkinter import *
-from Games.snake import *
+from Games.snake import SnakeGame
+from Games.slide import SlideGame
 
 BACKGROUND_COLOUR = "#FFD1DC"
-TOTAL_GAMES = 1
+TOTAL_GAMES = 2
 
 games_beaten = set()
 
@@ -22,8 +23,17 @@ def start_snake():
     games_done()
     window.deiconify()
 
-def start_game2():
-    pass
+def start_slide():
+    window.withdraw()
+    game = SlideGame()
+    game_window = game.game_start()
+    window.wait_window(game_window)
+
+    if game.has_beaten:
+        games_beaten.add("Snake")
+
+    games_done()
+    window.deiconify()
 
 
 window = Tk()
@@ -40,6 +50,9 @@ beaten_label.pack(pady=(0,20), side="top")
 
 
 game_one_button = Button(window, text="Snake", command=start_snake)
+game_one_button.pack(pady=10)
+
+game_one_button = Button(window, text="Sliding Tiles", command=start_slide)
 game_one_button.pack(pady=10)
 
 
