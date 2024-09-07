@@ -1,12 +1,16 @@
 from tkinter import *
 import random
+import sys
+
+sys.setrecursionlimit(2000)
+
 
 HEADER_COLOUR = "#ff809d"
 BACKGROUND_COLOUR = "#FFD1DC"
 TILESIZE = 1
 GRIDSIZE = 24
 GAME_WIDTH = GRIDSIZE*TILESIZE
-MINES = 99
+MINES = 1
 
 class MineGame():
     class Tile():
@@ -42,6 +46,7 @@ class MineGame():
 
         self.initialise_buttons()
         self.initialise_bombdata()
+        self.calculate_surroundings()
 
         self.game_window.update()
 
@@ -81,7 +86,7 @@ class MineGame():
 
     def initialise_bombdata(self):
         bombset = set()
-        while len(bombset) < 99:
+        while len(bombset) < MINES:
             bombset.add((random.randint(0,GRIDSIZE-1), random.randint(0,GRIDSIZE-1)))
 
         for row, col in bombset:
@@ -92,6 +97,38 @@ class MineGame():
             for c in range(0, GRIDSIZE):
                 if self.tiles[r][c].is_bomb:
                     self.buttons[r][c].config(bg="red", activebackground= "red")
+
+    def is_bomb(self, row, col):
+        if self.tiles[row][col].is_bomb:
+            return 1
+        return 0
+
+    def calculate_surroundings(self):
+        directions = [(-1, -1), (-1, 0), (-1, 1), 
+                  (0, -1),         (0, 1), 
+                  (1, -1), (1, 0), (1, 1)]
+          
+        for r in range(0, GRIDSIZE):
+            for c in range(0, GRIDSIZE):
+                for dr, dc in directions:
+                    new_r = r + dr
+                    new_c = c + dc
+
+                    if 0 <= new_r < GRIDSIZE and 0 <= new_c < GRIDSIZE:
+                        self.tiles[r][c].surrounding += self.is_bomb(new_r, new_c)
+    
+    def reveal_surroundings(self, r, c):
+        directions = [(-1, -1), (-1, 0), (-1, 1), 
+                  (0, -1),         (0, 1), 
+                  (1, -1), (1, 0), (1, 1)]
+
+        for dr, dc in directions:
+            new_r = r + dr
+            new_c = c + dc
+
+            if 0 <= new_r < GRIDSIZE and 0 <= new_c < GRIDSIZE and self.tiles[new_r][new_c].revealed == False:
+                self.tile_clicked(new_r, new_c)
+    
 
     def disable_all_buttons(self):
         for row in self.buttons:
@@ -112,6 +149,9 @@ class MineGame():
             number = self.tiles[row][col].surrounding if self.tiles[row][col].surrounding != 0 else ""
             self.buttons[row][col].config(bg=colour, activebackground= colour, text=number)
             self.tiles[row][col].revealed = True
+            if number == "":
+                self.reveal_surroundings(row,col)
+            
 
     def tile_right_clicked(self, row, col):
         print(f"Right clicked row {row} and column {col}")
