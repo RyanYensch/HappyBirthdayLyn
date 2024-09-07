@@ -3,7 +3,7 @@ from Games.snake import SnakeGame
 from Games.slide import SlideGame
 
 BACKGROUND_COLOUR = "#FFD1DC"
-TOTAL_GAMES = 2
+TOTAL_GAMES = 3
 
 
 games_beaten = set()
@@ -31,9 +31,9 @@ def get_reward():
                 bg=BACKGROUND_COLOUR, font=("Arial", 30, "bold"))
     win_title.pack(pady=10, side="top")
 
-    label1 = Label(win_window, text=lines[0])
+    label1 = Label(win_window, text=lines[0], font=("Arial", 20, "bold"))
     label1.pack()
-    label2 = Label(win_window, text=lines[1])
+    label2 = Label(win_window, text=lines[1], font= ("Arial", 20))
     label2.pack()
 
 
@@ -62,6 +62,20 @@ def start_slide():
 
     games_done()
     window.deiconify()
+
+
+def start_mines():
+    window.withdraw()
+    #game = MineGame()
+    #game_window = game.game_start()
+    #window.wait_window(game_window)
+
+    #if game.has_beaten:
+    #    games_beaten.add("Mines")
+
+    games_done()
+    window.deiconify()
+
 
 def read_first_two_lines(file_path):
     try:
