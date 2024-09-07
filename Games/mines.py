@@ -12,6 +12,7 @@ GRIDSIZE = 24
 GAME_WIDTH = GRIDSIZE*TILESIZE
 MINES = 99
 
+
 class MineGame():
     class Tile():
         def __init__(self) -> None:
@@ -19,7 +20,6 @@ class MineGame():
             self.surrounding = 0
             self.revealed = False
             self.flagged = False
-
 
     def __init__(self) -> None:
         self.has_beaten = False
@@ -30,22 +30,24 @@ class MineGame():
         self.label = NONE
         self.game_window = None
 
-
     def game_start(self):
         self.game_window = Toplevel()
         self.game_window.title("Minesweeper :)")
         self.game_window["bg"] = HEADER_COLOUR
         self.game_window.resizable(False, False)
 
-
         self.flag_frame = Frame(self.game_window, bg=HEADER_COLOUR)
-        self.flag_frame.grid(row=0, column=0, columnspan=GRIDSIZE, sticky="nsew")
+        self.flag_frame.grid(
+            row=0, column=0, columnspan=GRIDSIZE, sticky="nsew")
 
-        self.label = Label(self.flag_frame, text=f"Flags Left: {self.flags}", font=("consolas", 20, "bold"), bg=HEADER_COLOUR)
+        self.label = Label(self.flag_frame, text=f"Flags Left: {self.flags}", font=(
+            "consolas", 20, "bold"), bg=HEADER_COLOUR)
         self.label.grid(row=0, column=0, sticky="w", columnspan=GRIDSIZE-1)
 
-        back_button = Button(self.flag_frame, text="Back to Menu", command=self.game_window.destroy)
-        back_button.grid(row=0, column=GRIDSIZE-1, sticky="e", padx=(20*20*TILESIZE, 0))
+        back_button = Button(
+            self.flag_frame, text="Back to Menu", command=self.game_window.destroy)
+        back_button.grid(row=0, column=GRIDSIZE-1,
+                         sticky="e", padx=(20*20*TILESIZE, 0))
 
         self.initialise_buttons()
         self.initialise_bombdata()
@@ -65,7 +67,7 @@ class MineGame():
         self.play_game()
 
         return self.game_window
-    
+
     def play_game(self):
         pass
 
@@ -76,10 +78,11 @@ class MineGame():
             for c in range(0, GRIDSIZE):
                 colour = "#abd052" if (r+c) % 2 == 0 else "#b3d659"
                 button = Button(self.game_window, text="", font=('Arial', 10, 'bold'),
-                                width=1, height=1, fg= "black",
-                                bg=colour, activebackground= colour,bd=0,
+                                width=1, height=1, fg="black",
+                                bg=colour, activebackground=colour, bd=0,
                                 highlightthickness=0, command=lambda r=r, c=c: self.tile_clicked(r, c))
-                button.bind("<Button-3>", lambda event, r=r, c=c: self.tile_right_clicked(r, c))
+                button.bind("<Button-3>", lambda event, r=r,
+                            c=c: self.tile_right_clicked(r, c))
                 bombrow.append(self.Tile())
                 row.append(button)
                 button.grid(row=r+1, column=c, sticky="nsew")
@@ -90,7 +93,8 @@ class MineGame():
     def initialise_bombdata(self):
         bombset = set()
         while len(bombset) < MINES:
-            bombset.add((random.randint(0,GRIDSIZE-1), random.randint(0,GRIDSIZE-1)))
+            bombset.add((random.randint(0, GRIDSIZE-1),
+                        random.randint(0, GRIDSIZE-1)))
 
         for row, col in bombset:
             self.tiles[row][col].is_bomb = True
@@ -99,7 +103,7 @@ class MineGame():
         for r in range(0, GRIDSIZE):
             for c in range(0, GRIDSIZE):
                 if self.tiles[r][c].is_bomb:
-                    self.buttons[r][c].config(bg="red", activebackground= "red")
+                    self.buttons[r][c].config(bg="red", activebackground="red")
 
     def is_bomb(self, row, col):
         if self.tiles[row][col].is_bomb:
@@ -107,10 +111,10 @@ class MineGame():
         return 0
 
     def calculate_surroundings(self):
-        directions = [(-1, -1), (-1, 0), (-1, 1), 
-                  (0, -1),         (0, 1), 
-                  (1, -1), (1, 0), (1, 1)]
-          
+        directions = [(-1, -1), (-1, 0), (-1, 1),
+                      (0, -1),         (0, 1),
+                      (1, -1), (1, 0), (1, 1)]
+
         for r in range(0, GRIDSIZE):
             for c in range(0, GRIDSIZE):
                 for dr, dc in directions:
@@ -118,12 +122,13 @@ class MineGame():
                     new_c = c + dc
 
                     if 0 <= new_r < GRIDSIZE and 0 <= new_c < GRIDSIZE:
-                        self.tiles[r][c].surrounding += self.is_bomb(new_r, new_c)
-    
+                        self.tiles[r][c].surrounding += self.is_bomb(
+                            new_r, new_c)
+
     def reveal_surroundings(self, r, c):
-        directions = [(-1, -1), (-1, 0), (-1, 1), 
-                  (0, -1),         (0, 1), 
-                  (1, -1), (1, 0), (1, 1)]
+        directions = [(-1, -1), (-1, 0), (-1, 1),
+                      (0, -1),         (0, 1),
+                      (1, -1), (1, 0), (1, 1)]
 
         for dr, dc in directions:
             new_r = r + dr
@@ -131,7 +136,6 @@ class MineGame():
 
             if 0 <= new_r < GRIDSIZE and 0 <= new_c < GRIDSIZE and self.tiles[new_r][new_c].revealed == False:
                 self.tile_clicked(new_r, new_c)
-    
 
     def disable_all_buttons(self):
         for row in self.buttons:
@@ -149,7 +153,7 @@ class MineGame():
                 if self.tiles[r][c].revealed == False and self.is_bomb(r, c) == False:
                     count += 1
         return count
-    
+
     def check_win(self):
         if self.tiles_left() == 0:
             if self.has_beaten == False:
@@ -157,10 +161,12 @@ class MineGame():
                 win_popup.title("Congratulations!")
                 win_popup.geometry("300x100")
                 win_popup.configure(bg=HEADER_COLOUR)
-                label = Label(win_popup, text="YAYY NICE BABY!", font=("Arial", 20, "bold"), bg=HEADER_COLOUR, fg="black")
+                label = Label(win_popup, text="YAYY NICE BABY!", font=(
+                    "Arial", 20, "bold"), bg=HEADER_COLOUR, fg="black")
                 label.pack(expand=True, fill=BOTH)
-                
-                button = Button(win_popup, text="YIPPEEE", command=win_popup.destroy)
+
+                button = Button(win_popup, text="YIPPEEE",
+                                command=win_popup.destroy)
                 button.pack(pady=10)
 
                 win_popup.update_idletasks()
@@ -172,9 +178,8 @@ class MineGame():
                 y = int((screen_height / 2) - (popup_height / 2))
                 win_popup.geometry(f"{popup_width}x{popup_height}+{x}+{y}")
 
-                
             self.has_beaten = True
-                
+
     def tile_clicked(self, row, col):
         can_click = self.tiles[row][col].revealed == False and self.tiles[row][col].flagged == False
         if self.tiles[row][col].is_bomb and can_click:
@@ -182,22 +187,23 @@ class MineGame():
         elif can_click:
             colour = "#d2b99a" if (row+col) % 2 == 0 else "#dfc4a0"
             number = self.tiles[row][col].surrounding if self.tiles[row][col].surrounding != 0 else ""
-            self.buttons[row][col].config(bg=colour, activebackground=colour, text=number, fg= "black", activeforeground = "black")
+            self.buttons[row][col].config(
+                bg=colour, activebackground=colour, text=number, fg="black", activeforeground="black")
             self.tiles[row][col].revealed = True
             if number == "":
-                self.reveal_surroundings(row,col)
+                self.reveal_surroundings(row, col)
 
         self.check_win()
-            
 
     def tile_right_clicked(self, row, col):
         if self.tiles[row][col].flagged == False and self.tiles[row][col].revealed == False and self.flags > 0:
             self.tiles[row][col].flagged = True
             self.flags -= 1
-            self.buttons[row][col].config(text= "❤", fg="red", activeforeground="red")
+            self.buttons[row][col].config(
+                text="❤", fg="red", activeforeground="red")
             self.label.config(text=f"Flags Left: {self.flags}")
         elif self.tiles[row][col].flagged == True and self.tiles[row][col].revealed == False:
             self.tiles[row][col].flagged = False
             self.flags += 1
-            self.buttons[row][col].config(text= "")
+            self.buttons[row][col].config(text="")
             self.label.config(text=f"Flags Left: {self.flags}")
