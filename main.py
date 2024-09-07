@@ -8,6 +8,7 @@ TOTAL_GAMES = 2
 
 games_beaten = set()
 all_beaten = False
+lines = []
 
 def games_done():
     beaten_label.config(text=f"{len(games_beaten)} completed of {TOTAL_GAMES}")
@@ -29,6 +30,11 @@ def get_reward():
     win_title = Label(win_window, text="OMG YOU DID IT HERES YOUR PRIZE!", 
                 bg=BACKGROUND_COLOUR, font=("Arial", 30, "bold"))
     win_title.pack(pady=10, side="top")
+
+    label1 = Label(win_window, text=lines[0])
+    label1.pack()
+    label2 = Label(win_window, text=lines[1])
+    label2.pack()
 
 
     win_window.mainloop()
@@ -56,6 +62,22 @@ def start_slide():
 
     games_done()
     window.deiconify()
+
+def read_first_two_lines(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            lines = [next(file) for _ in range(2)]
+            return lines
+    except FileNotFoundError:
+        print(f"The file {file_path} does not exist.")
+        return None
+    except StopIteration:
+        print(f"The file {file_path} is empty or has fewer than two lines.")
+        return None
+
+file_path = 'Prize.txt'
+lines = read_first_two_lines(file_path)
+
 
 
 window = Tk()
