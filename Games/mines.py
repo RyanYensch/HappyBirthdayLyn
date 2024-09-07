@@ -31,13 +31,11 @@ class MineGame():
         self.game_window = None
 
 
-
     def game_start(self):
         self.game_window = Toplevel()
         self.game_window.title("Minesweeper :)")
         self.game_window["bg"] = HEADER_COLOUR
         self.game_window.resizable(False, False)
-        self.flag_image = PhotoImage(file="Images/red_flag.png")
 
 
         self.flag_frame = Frame(self.game_window, bg=HEADER_COLOUR)
@@ -144,6 +142,38 @@ class MineGame():
         self.reveal_bombs()
         self.disable_all_buttons()
 
+    def tiles_left(self):
+        count = 0
+        for r in range(0, GRIDSIZE):
+            for c in range(0, GRIDSIZE):
+                if self.tiles[r][c].revealed == False and self.is_bomb(r, c) == False:
+                    count += 1
+        return count
+    
+    def check_win(self):
+        if self.tiles_left() == 0:
+            if self.has_beaten == False:
+                win_popup = Toplevel(self.game_window)
+                win_popup.title("Congratulations!")
+                win_popup.geometry("300x100")
+                win_popup.configure(bg=HEADER_COLOUR)
+                label = Label(win_popup, text="YAYY NICE BABY!", font=("Arial", 20, "bold"), bg=HEADER_COLOUR, fg="black")
+                label.pack(expand=True, fill=BOTH)
+                
+                button = Button(win_popup, text="YIPPEEE", command=win_popup.destroy)
+                button.pack(pady=10)
+
+                win_popup.update_idletasks()
+                popup_width = win_popup.winfo_width()
+                popup_height = win_popup.winfo_height()
+                screen_width = win_popup.winfo_screenwidth()
+                screen_height = win_popup.winfo_screenheight()
+                x = int((screen_width / 2) - (popup_width / 2))
+                y = int((screen_height / 2) - (popup_height / 2))
+                win_popup.geometry(f"{popup_width}x{popup_height}+{x}+{y}")
+
+                
+            self.has_beaten = True
                 
     def tile_clicked(self, row, col):
         can_click = self.tiles[row][col].revealed == False and self.tiles[row][col].flagged == False
@@ -156,6 +186,8 @@ class MineGame():
             self.tiles[row][col].revealed = True
             if number == "":
                 self.reveal_surroundings(row,col)
+
+        self.check_win()
             
 
     def tile_right_clicked(self, row, col):
@@ -163,3 +195,9 @@ class MineGame():
             self.tiles[row][col].flagged = True
             self.flags -= 1
             self.buttons[row][col].config(text= "❤", fg="red", activeforeground="red")
+            self.label.config(text=f"Flags Left: {self.flags}")
+        elif self.tiles[row][col].flagged == True and self.tiles[row][col].revealed == False:
+            self.tiles[row][col].flagged = False
+            self.flags += 1
+            self.buttons[row][col].config(text= "")
+            self.label.config(text=f"Flags Left: {self.flags}")
