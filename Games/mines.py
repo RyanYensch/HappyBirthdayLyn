@@ -30,11 +30,15 @@ class MineGame():
         self.label = NONE
         self.game_window = None
 
+
+
     def game_start(self):
         self.game_window = Toplevel()
         self.game_window.title("Minesweeper :)")
         self.game_window["bg"] = HEADER_COLOUR
         self.game_window.resizable(False, False)
+        self.flag_image = PhotoImage(file="Images/red_flag.png")
+
 
         self.flag_frame = Frame(self.game_window, bg=HEADER_COLOUR)
         self.flag_frame.grid(row=0, column=0, columnspan=GRIDSIZE, sticky="nsew")
@@ -142,12 +146,13 @@ class MineGame():
 
                 
     def tile_clicked(self, row, col):
-        if self.tiles[row][col].is_bomb:
+        can_click = self.tiles[row][col].revealed == False and self.tiles[row][col].flagged == False
+        if self.tiles[row][col].is_bomb and can_click:
             self.game_over()
-        else:
+        elif can_click:
             colour = "#d2b99a" if (row+col) % 2 == 0 else "#dfc4a0"
             number = self.tiles[row][col].surrounding if self.tiles[row][col].surrounding != 0 else ""
-            self.buttons[row][col].config(bg=colour, activebackground= colour, text=number)
+            self.buttons[row][col].config(bg=colour, activebackground=colour, text=number, fg= "black", activeforeground = "black")
             self.tiles[row][col].revealed = True
             if number == "":
                 self.reveal_surroundings(row,col)
@@ -157,4 +162,4 @@ class MineGame():
         if self.tiles[row][col].flagged == False and self.tiles[row][col].revealed == False and self.flags > 0:
             self.tiles[row][col].flagged = True
             self.flags -= 1
-            self.buttons[row][col].config(text="🚩")
+            self.buttons[row][col].config(text= "❤", fg="red", activeforeground="red")
