@@ -10,12 +10,15 @@ GAME_WIDTH = GAME_HEIGHT = TILESPERROW * PIXELSPERTILEROW
 REMOVEDROW = 0
 REMOVEDCOL = 4
 
+
 class SlideGame():
     def __init__(self):
         self.game_window = None
         self.has_beaten = False
-        self.tiles = [["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""]]
-        self.correct_coords = [["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""]]
+        self.tiles = [["", "", "", "", ""], ["", "", "", "", ""], [
+            "", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""]]
+        self.correct_coords = [["", "", "", "", ""], ["", "", "", "", ""], [
+            "", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""]]
         self.blanktilecoords = []
         self.images = []
         self.lastblanktile = []
@@ -25,12 +28,13 @@ class SlideGame():
         self.game_window.title("Sliding Tiles :)")
         self.game_window["bg"] = HEADER_COLOUR
         self.game_window.resizable(False, False)
-        back_button = Button(self.game_window, text="Back to Menu", command=self.game_window.destroy)
+        back_button = Button(
+            self.game_window, text="Back to Menu", command=self.game_window.destroy)
         back_button.pack()
 
         global canvas
         canvas = Canvas(self.game_window, height=GAME_HEIGHT, width=GAME_WIDTH,
-                        bg = BACKGROUND_COLOUR,
+                        bg=BACKGROUND_COLOUR,
                         highlightbackground="black", highlightthickness=4)
         canvas.pack()
 
@@ -47,24 +51,28 @@ class SlideGame():
         self.game_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
 
         self.play_game()
-        
+
         return self.game_window
-    
-    
+
     def play_game(self):
         self.remove_tile(REMOVEDROW, REMOVEDCOL)
         self.shuffle_board()
 
     def inititalise_tiles(self):
-        for y in range(0,5):
+        for y in range(0, 5):
             row = []
-            for x in range(0,5):
+            for x in range(0, 5):
                 num = 25-(y*5 + x)
-                row.append(PhotoImage(file= f"Images/SlideGameImages/{num}.png"))
-                self.tiles[y][x] = (canvas.create_image(x*PIXELSPERTILEROW,y*PIXELSPERTILEROW, image=row[x], anchor="nw"))
-                canvas.tag_bind(self.tiles[y][x], '<Button-1>', lambda event, id=self.tiles[y][x]: self.on_image_click(id))
-                self.correct_coords[y][x] = (x*PIXELSPERTILEROW,y*PIXELSPERTILEROW)
-                canvas.create_rectangle(x*PIXELSPERTILEROW,y*PIXELSPERTILEROW,x*PIXELSPERTILEROW+PIXELSPERTILEROW,y*PIXELSPERTILEROW+PIXELSPERTILEROW)
+                row.append(PhotoImage(
+                    file=f"Images/SlideGameImages/{num}.png"))
+                self.tiles[y][x] = (canvas.create_image(
+                    x*PIXELSPERTILEROW, y*PIXELSPERTILEROW, image=row[x], anchor="nw"))
+                canvas.tag_bind(self.tiles[y][x], '<Button-1>', lambda event,
+                                id=self.tiles[y][x]: self.on_image_click(id))
+                self.correct_coords[y][x] = (
+                    x*PIXELSPERTILEROW, y*PIXELSPERTILEROW)
+                canvas.create_rectangle(x*PIXELSPERTILEROW, y*PIXELSPERTILEROW, x *
+                                        PIXELSPERTILEROW+PIXELSPERTILEROW, y*PIXELSPERTILEROW+PIXELSPERTILEROW)
                 canvas.image = row[x]
             self.images.append(row)
 
@@ -75,20 +83,22 @@ class SlideGame():
     def swap_tiles(self, row, col, image_id):
         if abs(self.blanktilecoords[0]/PIXELSPERTILEROW - col) + abs(self.blanktilecoords[1]/PIXELSPERTILEROW - row) == 1:
             coords = canvas.coords(image_id)
-            canvas.coords(image_id, self.blanktilecoords[0], self.blanktilecoords[1])
-            self.tiles[int(self.blanktilecoords[1]/PIXELSPERTILEROW)][int(self.blanktilecoords[0]/PIXELSPERTILEROW)] = self.tiles[row][col]
+            canvas.coords(
+                image_id, self.blanktilecoords[0], self.blanktilecoords[1])
+            self.tiles[int(self.blanktilecoords[1]/PIXELSPERTILEROW)
+                       ][int(self.blanktilecoords[0]/PIXELSPERTILEROW)] = self.tiles[row][col]
             self.tiles[row][col] = None
             self.blanktilecoords = coords
 
     def on_image_click(self, image_id):
         coords = canvas.coords(image_id)
-        self.swap_tiles(int(coords[1]/PIXELSPERTILEROW), int(coords[0]/PIXELSPERTILEROW), image_id)
+        self.swap_tiles(int(coords[1]/PIXELSPERTILEROW),
+                        int(coords[0]/PIXELSPERTILEROW), image_id)
         self.check_for_win()
 
-
     def check_for_win(self):
-        for row in range (0,5):
-            for col in range(0,5):
+        for row in range(0, 5):
+            for col in range(0, 5):
                 if row == REMOVEDROW and col == REMOVEDCOL:
                     continue
                 try:
@@ -100,21 +110,22 @@ class SlideGame():
                     return False
                 except TclError:
                     return False
-        
+
         self.game_won()
-        
+
     def game_won(self):
         self.has_beaten = True
-        for row in range (0,5):
-            for col in range(0,5):
+        for row in range(0, 5):
+            for col in range(0, 5):
                 if row == REMOVEDROW and col == REMOVEDCOL:
                     continue
                 self.remove_tile(row, col)
 
-        img = PhotoImage(file= "Images/SlideGameImages/FullPicture.png")
-        canvas.create_image(0,0, image=img, anchor="nw")
+        img = PhotoImage(file="Images/SlideGameImages/FullPicture.png")
+        canvas.create_image(0, 0, image=img, anchor="nw")
         canvas.image = img
-        canvas.create_text(GAME_WIDTH/2, GAME_HEIGHT/2, text="YOU DID IT!", fill="red", font= ("Arial", 50, "bold"))
+        canvas.create_text(GAME_WIDTH/2, GAME_HEIGHT/2,
+                           text="YOU DID IT!", fill="red", font=("Arial", 50, "bold"))
         self.game_window.update()
 
     def shuffle_board(self):
@@ -139,9 +150,9 @@ class SlideGame():
             if self.lastblanktile in choices:
                 choices.remove(self.lastblanktile)
 
-        self.lastblanktile = [x,y]
+        self.lastblanktile = [x, y]
         swapper = random.choice(choices)
         col = int(swapper[0])
         row = int(swapper[1])
         img_id = self.tiles[row][col]
-        self.swap_tiles(row,col, img_id)
+        self.swap_tiles(row, col, img_id)
