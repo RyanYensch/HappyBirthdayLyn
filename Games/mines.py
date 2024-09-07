@@ -13,6 +13,7 @@ class MineGame():
         def __init__(self) -> None:
             self.is_bomb = False
             self.surrounding = 0
+            self.revealed = False
 
 
     def __init__(self) -> None:
@@ -67,7 +68,7 @@ class MineGame():
             for c in range(0, GRIDSIZE):
                 colour = "#abd052" if (r+c) % 2 == 0 else "#b3d659"
                 button = Button(self.game_window, text="", font=('Arial', 10, 'bold'),
-                                width=1, height=1,
+                                width=1, height=1, fg= "black",
                                 bg=colour, activebackground= colour,bd=0,
                                 highlightthickness=0, command=lambda r=r, c=c: self.tile_clicked(r, c))
                 button.bind("<Button-3>", lambda event, r=r, c=c: self.tile_right_clicked(r, c))
@@ -86,10 +87,31 @@ class MineGame():
         for row, col in bombset:
             self.tiles[row][col].is_bomb = True
 
+    def reveal_bombs(self):
+        for r in range(0, GRIDSIZE):
+            for c in range(0, GRIDSIZE):
+                if self.tiles[r][c].is_bomb:
+                    self.buttons[r][c].config(bg="red", activebackground= "red")
+
+    def disable_all_buttons(self):
+        for row in self.buttons:
+            for button in row:
+                button.config(state="disabled")
+
+    def game_over(self):
+        self.reveal_bombs()
+        self.disable_all_buttons()
+
                 
     def tile_clicked(self, row, col):
         print(f"clicked row {row} and column {col}")
-        print(self.tiles[row][col].is_bomb)
+        if self.tiles[row][col].is_bomb :
+            self.game_over()
+        else:
+            colour = "#d2b99a" if (row+col) % 2 == 0 else "#dfc4a0"
+            number = self.tiles[row][col].surrounding if self.tiles[row][col].surrounding != 0 else ""
+            self.buttons[row][col].config(bg=colour, activebackground= colour, text=number)
+            self.tiles[row][col].revealed = True
 
     def tile_right_clicked(self, row, col):
         print(f"Right clicked row {row} and column {col}")
