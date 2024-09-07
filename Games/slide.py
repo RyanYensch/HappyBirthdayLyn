@@ -1,5 +1,5 @@
 from tkinter import *
-import time
+import random
 
 HEADER_COLOUR = "#ff809d"
 BACKGROUND_COLOUR = "#FFD1DC"
@@ -51,8 +51,8 @@ class SlideGame():
     
     
     def play_game(self):
-        self.blanktilecoords = canvas.coords(self.tiles[0][4])
         self.remove_tile(REMOVEDROW, REMOVEDCOL)
+        self.shuffle_board()
 
     def inititalise_tiles(self):
         for y in range(0,5):
@@ -68,17 +68,22 @@ class SlideGame():
             self.images.append(row)
 
     def remove_tile(self, row, col):
+        self.blanktilecoords = canvas.coords(self.tiles[row][col])
         canvas.delete(self.tiles[row][col])
 
     def swap_tiles(self, row, col, image_id):
-        if abs(self.blanktilecoords[0]/PIXELSPERTILEROW - row) + abs(self.blanktilecoords[1]/PIXELSPERTILEROW - col) == 1:
+        if abs(self.blanktilecoords[0]/PIXELSPERTILEROW - col) + abs(self.blanktilecoords[1]/PIXELSPERTILEROW - row) == 1:
             coords = canvas.coords(image_id)
             canvas.coords(image_id, self.blanktilecoords[0], self.blanktilecoords[1])
             self.blanktilecoords = coords
+        else:
+            print("invalid")
+            print(self.blanktilecoords[0]/PIXELSPERTILEROW, " ", row)
+            print(self.blanktilecoords[1]/PIXELSPERTILEROW, " ", col)
 
     def on_image_click(self, image_id):
         coords = canvas.coords(image_id)
-        self.swap_tiles(coords[0]/PIXELSPERTILEROW, coords[1]/PIXELSPERTILEROW, image_id)
+        self.swap_tiles(coords[1]/PIXELSPERTILEROW, coords[0]/PIXELSPERTILEROW, image_id)
         self.check_for_win()
 
 
@@ -88,7 +93,6 @@ class SlideGame():
                 if row == REMOVEDROW and col == REMOVEDCOL:
                     continue
                 corr_coords = self.correct_coords[row][col]
-                print(corr_coords)
                 act_coords = canvas.coords(self.tiles[row][col])
                 if (corr_coords[0] != act_coords[0]) or (corr_coords[1] != act_coords[1]):
                     return False
@@ -106,3 +110,27 @@ class SlideGame():
         img = PhotoImage(file= "Images/SlideGameImages/FullPicture.png")
         canvas.create_image(0,0, image=img, anchor="nw")
         canvas.image = img
+
+    def shuffle_board(self):
+        y = self.blanktilecoords[1]/PIXELSPERTILEROW
+        x = self.blanktilecoords[0]/PIXELSPERTILEROW
+        choices = []
+        print(x, "-", y)
+
+        if y > 0:
+            choices.append((x, y-1))
+        if y < 4:
+            choices.append((x, y+1))
+        if x > 0:
+            choices.append((x-1, y))
+        if x < 4:
+            choices.append((x+1, y))
+
+        swapper = random.choice(choices)
+        col = int(swapper[0])
+        row = int(swapper[1])
+        print(col, ", ", row)
+        img_id = self.tiles[row][col]
+        print(self.blanktilecoords)
+        print(canvas.coords(img_id))
+        self.swap_tiles(row,col, img_id)
