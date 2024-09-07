@@ -10,7 +10,7 @@ BACKGROUND_COLOUR = "#FFD1DC"
 TILESIZE = 1
 GRIDSIZE = 24
 GAME_WIDTH = GRIDSIZE*TILESIZE
-MINES = 1
+MINES = 99
 
 class MineGame():
     class Tile():
@@ -18,6 +18,7 @@ class MineGame():
             self.is_bomb = False
             self.surrounding = 0
             self.revealed = False
+            self.flagged = False
 
 
     def __init__(self) -> None:
@@ -141,8 +142,7 @@ class MineGame():
 
                 
     def tile_clicked(self, row, col):
-        print(f"clicked row {row} and column {col}")
-        if self.tiles[row][col].is_bomb :
+        if self.tiles[row][col].is_bomb:
             self.game_over()
         else:
             colour = "#d2b99a" if (row+col) % 2 == 0 else "#dfc4a0"
@@ -154,4 +154,7 @@ class MineGame():
             
 
     def tile_right_clicked(self, row, col):
-        print(f"Right clicked row {row} and column {col}")
+        if self.tiles[row][col].flagged == False and self.tiles[row][col].revealed == False and self.flags > 0:
+            self.tiles[row][col].flagged = True
+            self.flags -= 1
+            self.buttons[row][col].config(text="🚩")
