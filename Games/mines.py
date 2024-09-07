@@ -64,12 +64,7 @@ class MineGame():
 
         self.game_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
 
-        self.play_game()
-
         return self.game_window
-
-    def play_game(self):
-        pass
 
     def initialise_buttons(self):
         for r in range(0, GRIDSIZE):
