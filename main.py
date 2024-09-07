@@ -1,6 +1,7 @@
 from tkinter import *
 from Games.snake import SnakeGame
 from Games.slide import SlideGame
+from Games.mines import MineGame
 
 BACKGROUND_COLOUR = "#FFD1DC"
 TOTAL_GAMES = 3
@@ -66,12 +67,12 @@ def start_slide():
 
 def start_mines():
     window.withdraw()
-    #game = MineGame()
-    #game_window = game.game_start()
-    #window.wait_window(game_window)
+    game = MineGame()
+    game_window = game.game_start()
+    window.wait_window(game_window)
 
-    #if game.has_beaten:
-    #    games_beaten.add("Mines")
+    if game.has_beaten:
+        games_beaten.add("Mines")
 
     games_done()
     window.deiconify()
@@ -111,6 +112,9 @@ game_one_button = Button(window, text="Snake", command=start_snake)
 game_one_button.pack(pady=10)
 
 game_one_button = Button(window, text="Sliding Tiles", command=start_slide)
+game_one_button.pack(pady=10)
+
+game_one_button = Button(window, text="Minesweeper", command=start_mines)
 game_one_button.pack(pady=10)
 
 
