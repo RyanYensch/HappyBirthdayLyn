@@ -6,12 +6,15 @@ BACKGROUND_COLOUR = "#FFD1DC"
 TILESPERROW = 5
 PIXELSPERTILEROW = 100
 GAME_WIDTH = GAME_HEIGHT = TILESPERROW * PIXELSPERTILEROW
+REMOVEDROW = 0
+REMOVEDCOL = 4
 
 class SlideGame():
     def __init__(self):
         self.game_window = None
         self.has_beaten = False
         self.tiles = [["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""]]
+        self.correct_coords = [["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""]]
         self.blanktilecoords = []
         self.images = []
 
@@ -49,7 +52,7 @@ class SlideGame():
     
     def play_game(self):
         self.blanktilecoords = canvas.coords(self.tiles[0][4])
-        self.remove_tile(0, 4)
+        self.remove_tile(REMOVEDROW, REMOVEDCOL)
 
     def inititalise_tiles(self):
         for y in range(0,5):
@@ -58,8 +61,8 @@ class SlideGame():
                 num = 25-(y*5 + x)
                 row.append(PhotoImage(file= f"Images/SlideGameImages/{num}.png"))
                 self.tiles[y][x] = (canvas.create_image(x*PIXELSPERTILEROW,y*PIXELSPERTILEROW, image=row[x], anchor="nw"))
-                canvas.tag_bind(self.tiles[y][x], '<Button-1>', lambda event, id=self.tiles[y][x]: self.on_image_click(event, id))
-
+                canvas.tag_bind(self.tiles[y][x], '<Button-1>', lambda event, id=self.tiles[y][x]: self.on_image_click(id))
+                self.correct_coords[y][x] = (x*PIXELSPERTILEROW,y*PIXELSPERTILEROW)
                 canvas.create_rectangle(x*PIXELSPERTILEROW,y*PIXELSPERTILEROW,x*PIXELSPERTILEROW+PIXELSPERTILEROW,y*PIXELSPERTILEROW+PIXELSPERTILEROW)
                 canvas.image = row[x]
             self.images.append(row)
@@ -73,7 +76,33 @@ class SlideGame():
             canvas.coords(image_id, self.blanktilecoords[0], self.blanktilecoords[1])
             self.blanktilecoords = coords
 
-
-    def on_image_click(self, event, image_id):
+    def on_image_click(self, image_id):
         coords = canvas.coords(image_id)
         self.swap_tiles(coords[0]/PIXELSPERTILEROW, coords[1]/PIXELSPERTILEROW, image_id)
+        self.check_for_win()
+
+
+    def check_for_win(self):
+        for row in range (0,5):
+            for col in range(0,5):
+                if row == REMOVEDROW and col == REMOVEDCOL:
+                    continue
+                corr_coords = self.correct_coords[row][col]
+                print(corr_coords)
+                act_coords = canvas.coords(self.tiles[row][col])
+                if (corr_coords[0] != act_coords[0]) or (corr_coords[1] != act_coords[1]):
+                    return False
+        
+        self.game_won()
+        
+    def game_won(self):
+        self.has_beaten = True
+        for row in range (0,5):
+            for col in range(0,5):
+                if row == REMOVEDROW and col == REMOVEDCOL:
+                    continue
+                self.remove_tile(row, col)
+
+        img = PhotoImage(file= "Images/SlideGameImages/FullPicture.png")
+        canvas.create_image(0,0, image=img, anchor="nw")
+        canvas.image = img

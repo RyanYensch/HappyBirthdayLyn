@@ -30,7 +30,7 @@ def start_slide():
     window.wait_window(game_window)
 
     if game.has_beaten:
-        games_beaten.add("Snake")
+        games_beaten.add("Slide")
 
     games_done()
     window.deiconify()
