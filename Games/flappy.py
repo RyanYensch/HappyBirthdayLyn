@@ -16,6 +16,7 @@ TICK_LENGTH = 50
 REQUIRED_SCORE = 20
 PIPE_WIDTH = 50
 PIPE_GAP = math.floor(BIRD_HEIGHT * 2.5)
+FLIGHT_SPEED = 1
 
 
 canvas = None
@@ -29,21 +30,22 @@ class FlappyGame():
             self.width = PIPE_WIDTH
             self.gap = PIPE_GAP
         
-        def spawn_pipe(self):
-            coords = (GAME_WIDTH - self.width, 0)
-            self.all_coords.append(coords)
+        def generate_pipe(self):
+            coords = [GAME_WIDTH - self.width, 0]
             length = random.randint(self.width, GAME_HEIGHT - self.width - self.gap)
+            coords.append(coords[0] + self.width)
+            coords.append(coords[1] + length)
+            self.all_coords.append(coords)
             self.pipe_lengths.append(length)
-            self.shapes.append(canvas.create_rectangle(coords[0], coords[1],
-                                                       coords[0] + self.width, coords[1] + length,
-                                                       fill=PIPE_COLOUR))
-            coords = (GAME_WIDTH - self.width, length + self.gap)
+            self.shapes.append(canvas.create_rectangle(coords[0], coords[1], coords[2], coords[3], fill=PIPE_COLOUR))
+            
+            coords = [GAME_WIDTH - self.width, length + self.gap]
+            coords.append(coords[0] + self.width)
+            coords.append(coords[1] + (GAME_HEIGHT - length - self.gap))
             self.all_coords.append(coords)
             self.pipe_lengths.append(GAME_HEIGHT - length - self.gap)
-            self.shapes.append(canvas.create_rectangle(coords[0], coords[1],
-                                                        coords[0] + self.width,
-                                                        coords[1] + (GAME_HEIGHT - length - self.gap),
-                                                        fill=PIPE_COLOUR))
+            self.shapes.append(canvas.create_rectangle(coords[0], coords[1], coords[2], coords[3], fill=PIPE_COLOUR))
+
             
             
         
@@ -107,7 +109,7 @@ class FlappyGame():
         canvas.pack()
 
         self.bird.spawn_bird()
-        self.pipes.spawn_pipe()
+        self.pipes.generate_pipe()
         self.game_window.update()
 
         window_height = self.game_window.winfo_height()
