@@ -14,9 +14,9 @@ FLAP_POWER = 30
 GRAVITY_STRENGTH = 1
 TICK_LENGTH = 50
 REQUIRED_SCORE = 20
-PIPE_WIDTH = 50
+PIPE_WIDTH = BIRD_WIDTH
 PIPE_GAP = math.floor(BIRD_HEIGHT * 2.5)
-FLIGHT_SPEED = 1
+FLIGHT_SPEED = math.floor(TICK_LENGTH/10)
 
 
 canvas = None
@@ -26,7 +26,6 @@ class FlappyGame():
         def __init__(self) -> None:
             self.all_coords = []
             self.shapes = []
-            self.pipe_lengths = []
             self.width = PIPE_WIDTH
             self.gap = PIPE_GAP
         
@@ -36,24 +35,32 @@ class FlappyGame():
             coords.append(coords[0] + self.width)
             coords.append(coords[1] + length)
             self.all_coords.append(coords)
-            self.pipe_lengths.append(length)
             self.shapes.append(canvas.create_rectangle(coords[0], coords[1], coords[2], coords[3], fill=PIPE_COLOUR))
             
             coords = [GAME_WIDTH - self.width, length + self.gap]
             coords.append(coords[0] + self.width)
             coords.append(coords[1] + (GAME_HEIGHT - length - self.gap))
             self.all_coords.append(coords)
-            self.pipe_lengths.append(GAME_HEIGHT - length - self.gap)
             self.shapes.append(canvas.create_rectangle(coords[0], coords[1], coords[2], coords[3], fill=PIPE_COLOUR))
 
         
         def move_pipes(self):
             index = 0
+            remove_first = False
             for x, y, rightx, bottomy in self.all_coords:
-                self.all_coords[index] = [x-FLIGHT_SPEED, y, rightx-FLIGHT_SPEED, bottomy]
+                new_coords = [x-FLIGHT_SPEED, y, rightx-FLIGHT_SPEED, bottomy]
+                self.all_coords[index] = new_coords
                 canvas.delete(self.shapes[index])
+                if new_coords[2] > 0:
+                    self.shapes[index] = canvas.create_rectangle(new_coords[0], new_coords[1], new_coords[2], new_coords[3], fill=PIPE_COLOUR)
+                else:
+                    remove_first = True  
                 index+=1
             
+            if remove_first:
+                self.all_coords = self.all_coords[2:]
+                self.shapes = self.shapes[2:]
+                self.generate_pipe()
         
         
     class Bird():
@@ -72,7 +79,7 @@ class FlappyGame():
             canvas.delete(self.body)
             self.coords[1] -= FLAP_POWER
             if self.coords[1] < 0: self.coords[1] = 0
-            self.speed = 0
+            self.speed = 1
             self.spawn_bird()
             
         def fall(self):
@@ -146,6 +153,7 @@ class FlappyGame():
             self.done = True
         else:
             self.bird.fall()
+            self.pipes.move_pipes()
             self.game_window.after(TICK_LENGTH, self.next_tick)
         
     def check_floor_collision(self):
