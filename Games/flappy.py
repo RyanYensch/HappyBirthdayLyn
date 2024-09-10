@@ -2,13 +2,26 @@ from tkinter import *
 
 HEADER_COLOUR = "#ff809d"
 BACKGROUND_COLOUR = "#FFD1DC"
-GAME_WIDTH = 700
+GAME_WIDTH = 1000
 GAME_HEIGHT = 700
 BIRD_COLOUR = "orange"
 PIPE_COLOUR = "green"
+STARTX, STARTY = 200, 500
+BIRD_WIDTH, BIRD_HEIGHT = 75, 50
 
 
 class FlappyGame():
+    class bird():
+        def __init__(self) -> None:
+            self.coords = [STARTX, STARTY]
+            self.height = BIRD_HEIGHT
+            self.width = BIRD_WIDTH
+            
+            self.body = canvas.create_rectangle(self.coords[0], self.coords[1], 
+                                                self.coords[0] + self.width, self.coords[1] + self.height,
+                                                fill = BIRD_COLOUR, tag="bird")
+    
+    
     def __init__(self) -> None:
         self.game_window = None
         self.has_beaten = False
@@ -37,5 +50,11 @@ class FlappyGame():
         y = int((screen_height / 2) - (window_height / 2))
 
         self.game_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
+        
+        self.game_window.bind(
+            '<Left>', lambda event: self.change_direction('left'))
 
         return self.game_window
+    
+    def flap(self):
+        self.bird
