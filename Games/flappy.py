@@ -2,13 +2,17 @@ from tkinter import *
 
 HEADER_COLOUR = "#ff809d"
 BACKGROUND_COLOUR = "#FFD1DC"
+GAME_WIDTH = 700
+GAME_HEIGHT = 700
+BIRD_COLOUR = "orange"
+PIPE_COLOUR = "green"
 
 
 class FlappyGame():
     def __init__(self) -> None:
         self.game_window = None
         self.has_beaten = False
-
+        
     def game_start(self):
         self.game_window = Toplevel()
         self.game_window.title("Flappy Bird :)")
@@ -17,6 +21,11 @@ class FlappyGame():
         back_button = Button(
             self.game_window, text="Back to Menu", command=self.game_window.destroy)
         back_button.pack()
+        
+        global canvas
+        canvas = Canvas(self.game_window, height= GAME_HEIGHT, width= GAME_WIDTH,
+                        bg = BACKGROUND_COLOUR, highlightbackground="black", highlightthickness=4)
+        canvas.pack()
 
         self.game_window.update()
 
