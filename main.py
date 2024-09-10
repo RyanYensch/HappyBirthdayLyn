@@ -3,6 +3,7 @@ from Games.snake import SnakeGame
 from Games.slide import SlideGame
 from Games.mines import MineGame
 from Games.flappy import FlappyGame
+from Games.simon import SimonGame
 
 BACKGROUND_COLOUR = "#FFD1DC"
 TOTAL_GAMES = 4
@@ -102,6 +103,19 @@ def start_flappy():
     games_done()
     window.deiconify()
 
+def start_simon():
+    window.withdraw()
+    game = SimonGame()
+    game_window = game.game_start()
+    window.wait_window(game_window)
+
+    if game.has_beaten:
+        games_beaten.add("simon")
+        simon_button.config(fg="green", activeforeground="green")
+
+
+    games_done()
+    window.deiconify()
 
 def read_first_two_lines(file_path):
     try:
@@ -144,6 +158,9 @@ mine_button.pack(pady=10)
 
 flap_button = Button(window, text="Flappy Bird", command=start_flappy)
 flap_button.pack(pady=10)
+
+simon_button = Button(window, text="Simon", command=start_simon)
+simon_button.pack(pady=10)
 
 
 window.mainloop()
