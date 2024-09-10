@@ -52,6 +52,7 @@ def start_snake():
 
     if game.got_required_score():
         games_beaten.add("Snake")
+        snake_button.config(fg="green", activeforeground="green")
 
     games_done()
     window.deiconify()
@@ -65,6 +66,8 @@ def start_slide():
 
     if game.has_beaten:
         games_beaten.add("Slide")
+        slide_button.config(fg="green", activeforeground="green")
+
 
     games_done()
     window.deiconify()
@@ -78,6 +81,8 @@ def start_mines():
 
     if game.has_beaten:
         games_beaten.add("Mines")
+        mine_button.config(fg="green", activeforeground="green")
+
 
     games_done()
     window.deiconify()
@@ -91,6 +96,8 @@ def start_flappy():
 
     if game.has_beaten:
         games_beaten.add("flappy")
+        flap_button.config(fg="green", activeforeground="green")
+
 
     games_done()
     window.deiconify()
@@ -126,17 +133,17 @@ beaten_label = Label(window, text=f"0 completed of {TOTAL_GAMES}",
 beaten_label.pack(pady=(0, 20), side="top")
 
 
-game_one_button = Button(window, text="Snake", command=start_snake)
-game_one_button.pack(pady=10)
+snake_button = Button(window, text="Snake", command=start_snake)
+snake_button.pack(pady=10)
 
-game_two_button = Button(window, text="Sliding Tiles", command=start_slide)
-game_two_button.pack(pady=10)
+slide_button = Button(window, text="Sliding Tiles", command=start_slide)
+slide_button.pack(pady=10)
 
-game_three_button = Button(window, text="Minesweeper", command=start_mines)
-game_three_button.pack(pady=10)
+mine_button = Button(window, text="Minesweeper", command=start_mines)
+mine_button.pack(pady=10)
 
-game_four_button = Button(window, text="Flappy Bird", command=start_flappy)
-game_four_button.pack(pady=10)
+flap_button = Button(window, text="Flappy Bird", command=start_flappy)
+flap_button.pack(pady=10)
 
 
 window.mainloop()
