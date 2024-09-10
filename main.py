@@ -2,6 +2,7 @@ from tkinter import *
 from Games.snake import SnakeGame
 from Games.slide import SlideGame
 from Games.mines import MineGame
+from Games.flappy import FlappyGame
 
 BACKGROUND_COLOUR = "#FFD1DC"
 TOTAL_GAMES = 3
@@ -80,6 +81,19 @@ def start_mines():
 
     games_done()
     window.deiconify()
+    
+
+def start_flappy():
+    window.withdraw()
+    game = FlappyGame()
+    game_window = game.game_start()
+    window.wait_window(game_window)
+
+    if game.has_beaten:
+        games_beaten.add("flappy")
+
+    games_done()
+    window.deiconify()
 
 
 def read_first_two_lines(file_path):
@@ -115,11 +129,14 @@ beaten_label.pack(pady=(0, 20), side="top")
 game_one_button = Button(window, text="Snake", command=start_snake)
 game_one_button.pack(pady=10)
 
-game_one_button = Button(window, text="Sliding Tiles", command=start_slide)
-game_one_button.pack(pady=10)
+game_two_button = Button(window, text="Sliding Tiles", command=start_slide)
+game_two_button.pack(pady=10)
 
-game_one_button = Button(window, text="Minesweeper", command=start_mines)
-game_one_button.pack(pady=10)
+game_three_button = Button(window, text="Minesweeper", command=start_mines)
+game_three_button.pack(pady=10)
+
+game_four_button = Button(window, text="Minesweeper", command=start_flappy)
+game_four_button.pack(pady=10)
 
 
 window.mainloop()
