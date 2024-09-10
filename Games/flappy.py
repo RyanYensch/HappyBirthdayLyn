@@ -11,6 +11,7 @@ BIRD_WIDTH, BIRD_HEIGHT = 75, 50
 FLAP_POWER = 30
 GRAVITY_STRENGTH = 1
 TICK_LENGTH = 50
+REQUIRED_SCORE = 20
 
 
 canvas = None
@@ -47,15 +48,26 @@ class FlappyGame():
         self.game_window = None
         self.has_beaten = False
         self.bird = self.Bird()
+        self.score = 0
+        self.score_frame = None
+        self.label = None
+        self.Done = False
         
     def game_start(self):
         self.game_window = Toplevel()
         self.game_window.title("Flappy Bird :)")
         self.game_window["bg"] = HEADER_COLOUR
         self.game_window.resizable(False, False)
+        
+        self.score_frame = Frame(
+            self.game_window, bg=HEADER_COLOUR, width=GAME_WIDTH)
+        self.score_frame.pack(fill='x', expand=True)
         back_button = Button(
-            self.game_window, text="Back to Menu", command=self.game_window.destroy)
-        back_button.pack()
+            self.score_frame, text="Back to Menu", command=self.game_window.destroy)
+        back_button.pack(side= "right")
+        self.label = Label(self.score_frame, text="Score: {}".format(
+            self.score), font=("consolas", 20, "bold"), bg=HEADER_COLOUR)
+        self.label.pack(side="left", pady=10, padx=10)
         
         global canvas
         canvas = Canvas(self.game_window, height= GAME_HEIGHT, width= GAME_WIDTH,
@@ -83,8 +95,29 @@ class FlappyGame():
         return self.game_window
     
     def flap(self):
-        self.bird.flap()
+        if not self.done:
+            self.bird.flap()
 
     def next_tick(self):
         self.bird.fall()
-        self.game_window.after(TICK_LENGTH, self.next_tick)
+        if self.check_floor_collision() or self.check_pipe_collision():
+            self.game_over()
+            self.done = True
+        else:
+            self.game_window.after(TICK_LENGTH, self.next_tick)
+        
+    def check_floor_collision(self):
+        return self.bird.coords[1] + self.bird.height >= GAME_HEIGHT
+    
+    def check_pipe_collision(self):
+        return False
+        
+    def game_over(self) -> None:
+        canvas.delete(ALL)
+        canvas.create_text(canvas.winfo_width()/2, canvas.winfo_height()/2,
+                           font=('consolas', 70, "bold"),
+                           text="GAME OVER", fill="red", tag="game over")
+        if self.score >= REQUIRED_SCORE:
+            canvas.create_text(canvas.winfo_width()/2, 2*canvas.winfo_height()/3,
+                               font=('consolas', 25),
+                               text="YOU MET THE REQUIRED SCORE\nCONGRATS", fill="red", tag="done")
