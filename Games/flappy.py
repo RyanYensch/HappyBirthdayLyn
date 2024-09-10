@@ -154,7 +154,9 @@ class FlappyGame():
 
     def next_tick(self):
         self.total_ticks += 1
-        if self.total_ticks * FLIGHT_SPEED >= math.floor(GAME_WIDTH/2) and self.pipes.active_pipes < 2:
+        if self.total_ticks * FLIGHT_SPEED >= (math.floor(GAME_WIDTH+PIPE_WIDTH)/3) and self.pipes.active_pipes < 2:
+            self.pipes.generate_pipe()
+        elif self.total_ticks * FLIGHT_SPEED >= (math.floor(2*(GAME_WIDTH+ PIPE_WIDTH)/3)) and self.pipes.active_pipes < 3:
             self.pipes.generate_pipe()
             
         if self.check_floor_collision() or self.check_pipe_collision():
