@@ -116,8 +116,7 @@ class FlappyGame():
         back_button = Button(
             self.score_frame, text="Back to Menu", command=self.game_window.destroy)
         back_button.pack(side= "right")
-        self.label = Label(self.score_frame, text="Score: {}".format(
-            self.score), font=("consolas", 20, "bold"), bg=HEADER_COLOUR)
+        self.label = Label(self.score_frame, text=f"Score: {self.score}/{REQUIRED_SCORE}", font=("consolas", 20, "bold"), bg=HEADER_COLOUR)
         self.label.pack(side="left", pady=10, padx=10)
         
         global canvas
@@ -180,7 +179,9 @@ class FlappyGame():
                 else:
                     if x == self.bird.coords[0]:
                         self.score += 0.5
-                        self.label.config(text=f"Score: {int(self.score)}")
+                        self.label.config(text=f"Score: {int(self.score)}/{REQUIRED_SCORE}")
+                        if self.score == REQUIRED_SCORE:
+                            self.label.config(fg="green")
         return False
     
                     
