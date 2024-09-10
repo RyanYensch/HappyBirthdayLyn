@@ -5,7 +5,7 @@ from Games.mines import MineGame
 from Games.flappy import FlappyGame
 
 BACKGROUND_COLOUR = "#FFD1DC"
-TOTAL_GAMES = 3
+TOTAL_GAMES = 4
 
 
 games_beaten = set()
@@ -135,7 +135,7 @@ game_two_button.pack(pady=10)
 game_three_button = Button(window, text="Minesweeper", command=start_mines)
 game_three_button.pack(pady=10)
 
-game_four_button = Button(window, text="Minesweeper", command=start_flappy)
+game_four_button = Button(window, text="Flappy Bird", command=start_flappy)
 game_four_button.pack(pady=10)
 
 
