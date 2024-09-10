@@ -28,7 +28,6 @@ class FlappyGame():
             self.shapes = []
             self.width = PIPE_WIDTH
             self.gap = PIPE_GAP
-            self.point = 0
             self.active_pipes = 0
         
         def generate_pipe(self):
@@ -60,8 +59,6 @@ class FlappyGame():
                     remove_first = True
                 index+=1
             
-            if x > (STARTX + BIRD_WIDTH) and (x-FLIGHT_SPEED) <= (STARTX + BIRD_WIDTH):
-                self.point += 1
                             
             if remove_first:
                 self.all_coords = self.all_coords[2:]
@@ -179,9 +176,9 @@ class FlappyGame():
                 elif y == 0 and self.bird.coords[1] <= boty:
                     return True
                 else:
-                    self.score += self.pipes.point
-                    self.pipes.point = 0
-                    self.label.config(text=f"Score: {self.score}")
+                    if x == self.bird.coords[0]:
+                        self.score += 0.5
+                        self.label.config(text=f"Score: {int(self.score)}")
         return False
     
                     
@@ -192,6 +189,7 @@ class FlappyGame():
                            font=('consolas', 70, "bold"),
                            text="GAME OVER", fill="red", tag="game over")
         if self.score >= REQUIRED_SCORE:
+            self.has_beaten = True
             canvas.create_text(canvas.winfo_width()/2, 2*canvas.winfo_height()/3,
                                font=('consolas', 25),
                                text="YOU MET THE REQUIRED SCORE\nCONGRATS", fill="red", tag="done")
