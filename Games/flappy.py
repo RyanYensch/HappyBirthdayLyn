@@ -29,8 +29,10 @@ class FlappyGame():
             self.width = PIPE_WIDTH
             self.gap = PIPE_GAP
             self.point = 0
+            self.active_pipes = 0
         
         def generate_pipe(self):
+            self.active_pipes += 1
             coords = [GAME_WIDTH, 0]
             length = random.randint(self.width, GAME_HEIGHT - self.width - self.gap)
             coords.append(coords[0] + self.width)
@@ -103,6 +105,7 @@ class FlappyGame():
         self.score_frame = None
         self.label = None
         self.done = False
+        self.total_ticks = 0
         
     def game_start(self):
         self.game_window = Toplevel()
@@ -127,7 +130,6 @@ class FlappyGame():
 
         self.bird.spawn_bird()
         self.pipes.generate_pipe()
-        self.pipes.move_pipes()
         self.game_window.update()
 
         window_height = self.game_window.winfo_height()
@@ -144,6 +146,8 @@ class FlappyGame():
         self.game_window.bind('<space>', lambda event: self.flap())
         
         self.next_tick()
+        
+        
 
         return self.game_window
     
@@ -152,6 +156,10 @@ class FlappyGame():
             self.bird.flap()
 
     def next_tick(self):
+        self.total_ticks += 1
+        if self.total_ticks * FLIGHT_SPEED >= math.floor(GAME_WIDTH/2) and self.pipes.active_pipes < 2:
+            self.pipes.generate_pipe()
+            
         if self.check_floor_collision() or self.check_pipe_collision():
             self.game_over()
             self.done = True
