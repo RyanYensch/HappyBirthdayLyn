@@ -46,7 +46,13 @@ class FlappyGame():
             self.pipe_lengths.append(GAME_HEIGHT - length - self.gap)
             self.shapes.append(canvas.create_rectangle(coords[0], coords[1], coords[2], coords[3], fill=PIPE_COLOUR))
 
-            
+        
+        def move_pipes(self):
+            index = 0
+            for x, y, rightx, bottomy in self.all_coords:
+                self.all_coords[index] = [x-FLIGHT_SPEED, y, rightx-FLIGHT_SPEED, bottomy]
+                canvas.delete(self.shapes[index])
+                index+=1
             
         
         
@@ -65,7 +71,7 @@ class FlappyGame():
         def flap(self):
             canvas.delete(self.body)
             self.coords[1] -= FLAP_POWER
-            if self.coords[1] < 0: self.coords = 0
+            if self.coords[1] < 0: self.coords[1] = 0
             self.speed = 0
             self.spawn_bird()
             
@@ -110,6 +116,7 @@ class FlappyGame():
 
         self.bird.spawn_bird()
         self.pipes.generate_pipe()
+        self.pipes.move_pipes()
         self.game_window.update()
 
         window_height = self.game_window.winfo_height()
@@ -134,11 +141,11 @@ class FlappyGame():
             self.bird.flap()
 
     def next_tick(self):
-        self.bird.fall()
         if self.check_floor_collision() or self.check_pipe_collision():
             self.game_over()
             self.done = True
         else:
+            self.bird.fall()
             self.game_window.after(TICK_LENGTH, self.next_tick)
         
     def check_floor_collision(self):
