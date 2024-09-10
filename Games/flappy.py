@@ -28,16 +28,17 @@ class FlappyGame():
             self.shapes = []
             self.width = PIPE_WIDTH
             self.gap = PIPE_GAP
+            self.point = 0
         
         def generate_pipe(self):
-            coords = [GAME_WIDTH - self.width, 0]
+            coords = [GAME_WIDTH, 0]
             length = random.randint(self.width, GAME_HEIGHT - self.width - self.gap)
             coords.append(coords[0] + self.width)
             coords.append(coords[1] + length)
             self.all_coords.append(coords)
             self.shapes.append(canvas.create_rectangle(coords[0], coords[1], coords[2], coords[3], fill=PIPE_COLOUR))
             
-            coords = [GAME_WIDTH - self.width, length + self.gap]
+            coords = [GAME_WIDTH, length + self.gap]
             coords.append(coords[0] + self.width)
             coords.append(coords[1] + (GAME_HEIGHT - length - self.gap))
             self.all_coords.append(coords)
@@ -54,9 +55,12 @@ class FlappyGame():
                 if new_coords[2] > 0:
                     self.shapes[index] = canvas.create_rectangle(new_coords[0], new_coords[1], new_coords[2], new_coords[3], fill=PIPE_COLOUR)
                 else:
-                    remove_first = True  
+                    remove_first = True
                 index+=1
             
+            if x > (STARTX + BIRD_WIDTH) and (x-FLIGHT_SPEED) <= (STARTX + BIRD_WIDTH):
+                self.point += 1
+                            
             if remove_first:
                 self.all_coords = self.all_coords[2:]
                 self.shapes = self.shapes[2:]
@@ -167,7 +171,8 @@ class FlappyGame():
                 elif y == 0 and self.bird.coords[1] <= boty:
                     return True
                 else:
-                    self.score += 1
+                    self.score += self.pipes.point
+                    self.pipes.point = 0
                     self.label.config(text=f"Score: {self.score}")
         return False
     
