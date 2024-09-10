@@ -12,7 +12,7 @@ HEADER_COLOUR = "#ff809d"
 BACKGROUND_COLOUR = "#FFD1DC"
 XSTART = 0
 YSTART = 0
-REQUIRED_SCORE = 5
+REQUIRED_SCORE = 20
 
 canvas = None
 used_coords = []
@@ -82,8 +82,7 @@ class SnakeGame():
             self.game_window, bg=HEADER_COLOUR, width=GAME_WIDTH)
         self.score_frame.pack(fill='x', expand=True)
 
-        self.label = Label(self.score_frame, text="Score: {}".format(
-            self.score), font=("consolas", 20, "bold"), bg=HEADER_COLOUR)
+        self.label = Label(self.score_frame, text=f"Score: {self.score}/{REQUIRED_SCORE}", font=("consolas", 20, "bold"), bg=HEADER_COLOUR)
         self.label.pack(side="left", pady=10, padx=10)
 
         back_button = Button(
@@ -188,7 +187,9 @@ class SnakeGame():
 
         if x == food.coordinates[0] and y == food.coordinates[1]:
             self.score += 1
-            self.label.config(text=f"Score: {self.score}")
+            self.label.config(text=f"Score: {self.score}/{REQUIRED_SCORE}")
+            if self.score == REQUIRED_SCORE:
+                self.label.config(fg="green")
             canvas.delete("food")
 
             food = self.Food()
