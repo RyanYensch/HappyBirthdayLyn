@@ -21,6 +21,7 @@ class SimonGame():
         self.label = None
         self.turn_count = 1
         self.pattern = []
+        self.input_pattern = []
         
     def game_start(self):
         self.game_window = Toplevel()
@@ -58,6 +59,7 @@ class SimonGame():
         self.game_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
         
         self.start_turn()
+        self.game_window.update_idletasks()
         
         return self.game_window
     
@@ -76,22 +78,48 @@ class SimonGame():
             self.buttons.append(row)
             
     def button_clicked(self, row, col):
-        pass
+        self.input_pattern.append((row, col))
+        
+        for i in range(len(self.input_pattern)):
+            if self.input_pattern[i] != self.pattern[i]:
+                self.game_over()
+                return None
+        
+        if len(self.input_pattern) == len(self.pattern):
+            self.score += 1
+            self.label.config(text=f"Score: {self.score}/{REQUIRED_SCORE}")
+            if self.score == REQUIRED_SCORE:
+                self.label.congif(fg= "green")
+            self.set_buttons_state(False)
+            self.start_turn()
     
     def flash_button(self, row, col):
         self.buttons[row][col].config(bg=HEADER_COLOUR, activebackground=HEADER_COLOUR)
         self.game_window.update_idletasks()
         time.sleep(1)
         self.buttons[row][col].config(bg=BACKGROUND_COLOUR, activebackground=BACKGROUND_COLOUR)
+        self.game_window.update_idletasks()
+        time.sleep(0.2)
         
-    def toggle_buttons(self):
+    def game_over(self):
+        self.set_buttons_state(False)
+        label = Label(self.game_window, text=f"Game Over", font=(
+            "consolas", 20, "bold"), bg=HEADER_COLOUR)
+        label.grid(row=GRIDSIZE+1, column=0, columnspan=GRIDSIZE)
+        self.all_buttons_colour("red")
+        
+    def set_buttons_state(self, enable):
         for row in self.buttons:
             for button in row:
-                current_state = button['state']
-                if current_state == 'normal':
-                    button.config(state='disabled')
-                else:
+                if enable:
                     button.config(state='normal')
+                else:
+                    button.config(state='disabled')
+    
+    def all_buttons_colour(self, colour):
+        for row in self.buttons:
+            for button in row:
+                button.config(bg = colour)
     
     def show_pattern(self):
         for r, c in self.pattern:
@@ -99,7 +127,8 @@ class SimonGame():
 
     def start_turn(self):
         self.pattern.append((random.randint(0,GRIDSIZE-1), random.randint(0,GRIDSIZE-1)))
-        self.toggle_buttons()
+        self.input_pattern = []
+        self.set_buttons_state(False)
         self.show_pattern()
-        self.toggle_buttons()
+        self.set_buttons_state(True)
         
