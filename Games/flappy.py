@@ -173,7 +173,7 @@ class FlappyGame():
     def check_pipe_collision(self):
         for x,y, rightx, boty in self.pipes.all_coords:
             if self.bird.coords[0] <= rightx and (self.bird.coords[0] + self.bird.width) >= x:
-                if y != 0 and self.bird.coords[1] >= y:
+                if y != 0 and (self.bird.coords[1] + self.bird.height) >= y:
                     return True
                 elif y == 0 and self.bird.coords[1] <= boty:
                     return True
