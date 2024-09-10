@@ -1,5 +1,6 @@
 from tkinter import *
 import time
+import random
 
 HEADER_COLOUR = "#ff809d"
 BACKGROUND_COLOUR = "#FFD1DC"
@@ -18,6 +19,8 @@ class SimonGame():
         self.buttons = []
         self.score_frame = None
         self.label = None
+        self.turn_count = 1
+        self.pattern = []
         
     def game_start(self):
         self.game_window = Toplevel()
@@ -54,8 +57,7 @@ class SimonGame():
 
         self.game_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
         
-        self.flash_button(0,0)
-
+        self.start_turn()
         
         return self.game_window
     
@@ -81,3 +83,23 @@ class SimonGame():
         self.game_window.update_idletasks()
         time.sleep(1)
         self.buttons[row][col].config(bg=BACKGROUND_COLOUR, activebackground=BACKGROUND_COLOUR)
+        
+    def toggle_buttons(self):
+        for row in self.buttons:
+            for button in row:
+                current_state = button['state']
+                if current_state == 'normal':
+                    button.config(state='disabled')
+                else:
+                    button.config(state='normal')
+    
+    def show_pattern(self):
+        for r, c in self.pattern:
+            self.flash_button(r, c)
+
+    def start_turn(self):
+        self.pattern.append((random.randint(0,GRIDSIZE-1), random.randint(0,GRIDSIZE-1)))
+        self.toggle_buttons()
+        self.show_pattern()
+        self.toggle_buttons()
+        
