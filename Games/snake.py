@@ -3,7 +3,7 @@ import random
 
 GAME_WIDTH = 700
 GAME_HEIGHT = 700
-DELAY = 100
+DELAY = 75
 SPACE_SIZE = 50
 BODY_PARTS = 3
 SNAKE_COLOUR = "purple"
@@ -207,14 +207,15 @@ class SnakeGame():
             self.game_window.after(DELAY, self.next_turn, snake, food)
 
     def change_direction(self, new_direction) -> None:
-        if new_direction == 'left' and self.direction != 'right':
+        if new_direction == 'left' and self.direction != 'right' and self.can_do:
             self.direction = new_direction
-        elif new_direction == 'right' and self.direction != 'left':
+        elif new_direction == 'right' and self.direction != 'left' and self.can_do:
             self.direction = new_direction
-        elif new_direction == 'up' and self.direction != 'down':
+        elif new_direction == 'up' and self.direction != 'down' and self.can_do:
             self.direction = new_direction
-        elif new_direction == 'down' and self.direction != 'up':
+        elif new_direction == 'down' and self.direction != 'up' and self.can_do:
             self.direction = new_direction
+        self.can_do = False
 
     def check_collision(self, snake) -> None:
         x, y = snake.coordinates[0]
