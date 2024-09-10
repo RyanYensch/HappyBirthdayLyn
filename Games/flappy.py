@@ -160,8 +160,19 @@ class FlappyGame():
         return self.bird.coords[1] + self.bird.height >= GAME_HEIGHT
     
     def check_pipe_collision(self):
+        for x,y, rightx, boty in self.pipes.all_coords:
+            if self.bird.coords[0] <= rightx and (self.bird.coords[0] + self.bird.width) >= x:
+                if y != 0 and self.bird.coords[1] >= y:
+                    return True
+                elif y == 0 and self.bird.coords[1] <= boty:
+                    return True
+                else:
+                    self.score += 1
+                    self.label.config(text=f"Score: {self.score}")
         return False
-        
+    
+                    
+            
     def game_over(self) -> None:
         canvas.delete(ALL)
         canvas.create_text(canvas.winfo_width()/2, canvas.winfo_height()/2,
