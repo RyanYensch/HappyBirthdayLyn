@@ -1,5 +1,6 @@
 from tkinter import *
 import random
+import math
 
 HEADER_COLOUR = "#ff809d"
 BACKGROUND_COLOUR = "#FFD1DC"
@@ -14,7 +15,7 @@ GRAVITY_STRENGTH = 1
 TICK_LENGTH = 50
 REQUIRED_SCORE = 20
 PIPE_WIDTH = 50
-PIPE_GAP = 100
+PIPE_GAP = math.floor(BIRD_HEIGHT * 2.5)
 
 
 canvas = None
@@ -31,11 +32,20 @@ class FlappyGame():
         def spawn_pipe(self):
             coords = (GAME_WIDTH - self.width, 0)
             self.all_coords.append(coords)
-            length = random.randint(PIPE_WIDTH, GAME_HEIGHT - PIPE_WIDTH - PIPE_GAP)
+            length = random.randint(self.width, GAME_HEIGHT - self.width - self.gap)
             self.pipe_lengths.append(length)
             self.shapes.append(canvas.create_rectangle(coords[0], coords[1],
                                                        coords[0] + self.width, coords[1] + length,
                                                        fill=PIPE_COLOUR))
+            coords = (GAME_WIDTH - self.width, length + self.gap)
+            self.all_coords.append(coords)
+            self.pipe_lengths.append(GAME_HEIGHT - length - self.gap)
+            self.shapes.append(canvas.create_rectangle(coords[0], coords[1],
+                                                        coords[0] + self.width,
+                                                        coords[1] + (GAME_HEIGHT - length - self.gap),
+                                                        fill=PIPE_COLOUR))
+            
+            
         
         
     class Bird():
