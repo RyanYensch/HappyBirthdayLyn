@@ -1,4 +1,5 @@
 from tkinter import *
+import random
 
 HEADER_COLOUR = "#ff809d"
 BACKGROUND_COLOUR = "#FFD1DC"
@@ -12,11 +13,31 @@ FLAP_POWER = 30
 GRAVITY_STRENGTH = 1
 TICK_LENGTH = 50
 REQUIRED_SCORE = 20
+PIPE_WIDTH = 50
+PIPE_GAP = 100
 
 
 canvas = None
 
 class FlappyGame():
+    class Pipes():
+        def __init__(self) -> None:
+            self.all_coords = []
+            self.shapes = []
+            self.pipe_lengths = []
+            self.width = PIPE_WIDTH
+            self.gap = PIPE_GAP
+        
+        def spawn_pipe(self):
+            coords = (GAME_WIDTH - self.width, 0)
+            self.all_coords.append(coords)
+            length = random.randint(PIPE_WIDTH, GAME_HEIGHT - PIPE_WIDTH - PIPE_GAP)
+            self.pipe_lengths.append(length)
+            self.shapes.append(canvas.create_rectangle(coords[0], coords[1],
+                                                       coords[0] + self.width, coords[1] + length,
+                                                       fill=PIPE_COLOUR))
+        
+        
     class Bird():
         def __init__(self) -> None:
             self.coords = [STARTX, STARTY]
@@ -48,10 +69,11 @@ class FlappyGame():
         self.game_window = None
         self.has_beaten = False
         self.bird = self.Bird()
+        self.pipes = self.Pipes()
         self.score = 0
         self.score_frame = None
         self.label = None
-        self.Done = False
+        self.done = False
         
     def game_start(self):
         self.game_window = Toplevel()
@@ -75,6 +97,7 @@ class FlappyGame():
         canvas.pack()
 
         self.bird.spawn_bird()
+        self.pipes.spawn_pipe()
         self.game_window.update()
 
         window_height = self.game_window.winfo_height()
