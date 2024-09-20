@@ -17,7 +17,7 @@ lines = []
 def games_done():
     beaten_label.config(text=f"{len(games_beaten)} completed of {TOTAL_GAMES}")
     global all_beaten
-    if all_beaten == False and len(games_beaten) == TOTAL_GAMES:
+    if all_beaten == False and len(games_beaten) >= TOTAL_GAMES - 1:
         all_beaten = True
         beaten_button = Button(
             window, text="YOU HAVE BEATEN ALL THE GAMES\nCLICK HERE TO GET YOUR REWARD!", font="wingdings", command=get_reward)
@@ -150,7 +150,7 @@ beaten_label.pack(pady=(0, 20), side="top")
 snake_button = Button(window, text="Snake", command=start_snake)
 snake_button.pack(pady=10)
 
-slide_button = Button(window, text="Sliding Tiles", command=start_slide)
+slide_button = Button(window, text="Sliding Tiles (might break not counted)", command=start_slide)
 slide_button.pack(pady=10)
 
 mine_button = Button(window, text="Minesweeper", command=start_mines)
