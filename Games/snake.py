@@ -207,15 +207,14 @@ class SnakeGame():
             self.game_window.after(DELAY, self.next_turn, snake, food)
 
     def change_direction(self, new_direction) -> None:
-        if new_direction == 'left' and self.direction != 'right' and self.can_do:
+        if new_direction == 'left' and self.direction != 'right':
             self.direction = new_direction
-        elif new_direction == 'right' and self.direction != 'left' and self.can_do:
+        elif new_direction == 'right' and self.direction != 'left':
             self.direction = new_direction
-        elif new_direction == 'up' and self.direction != 'down' and self.can_do:
+        elif new_direction == 'up' and self.direction != 'down':
             self.direction = new_direction
-        elif new_direction == 'down' and self.direction != 'up' and self.can_do:
+        elif new_direction == 'down' and self.direction != 'up':
             self.direction = new_direction
-        self.can_do = False
 
     def check_collision(self, snake) -> None:
         x, y = snake.coordinates[0]

@@ -4,7 +4,7 @@ import random
 
 HEADER_COLOUR = "#ff809d"
 BACKGROUND_COLOUR = "#FFD1DC"
-REQUIRED_SCORE = 12
+REQUIRED_SCORE = 10
 GRIDSIZE = 4
 TILESIZE = 1
 
@@ -89,10 +89,11 @@ class SimonGame():
             self.score += 1
             self.label.config(text=f"Score: {self.score}/{REQUIRED_SCORE}")
             if self.score == REQUIRED_SCORE:
-                self.label.congif(fg= "green")
+                self.label.config(fg= "green")
+                self.has_beaten = True
             self.set_buttons_state(False)
             self.start_turn()
-    
+
     def flash_button(self, row, col):
         self.buttons[row][col].config(bg=HEADER_COLOUR, activebackground=HEADER_COLOUR)
         self.game_window.update_idletasks()

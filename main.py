@@ -6,7 +6,7 @@ from Games.flappy import FlappyGame
 from Games.simon import SimonGame
 
 BACKGROUND_COLOUR = "#FFD1DC"
-TOTAL_GAMES = 4
+TOTAL_GAMES = 5
 
 
 games_beaten = set()
@@ -37,9 +37,9 @@ def get_reward():
                       bg=BACKGROUND_COLOUR, font=("Arial", 30, "bold"))
     win_title.pack(pady=10, side="top")
 
-    label1 = Label(win_window, text=lines[0], font=("Arial", 20, "bold"))
+    label1 = Label(win_window, text=lines[0], font=("Arial", 20, "bold"), bg= BACKGROUND_COLOUR)
     label1.pack()
-    label2 = Label(win_window, text=lines[1], font=("Arial", 20))
+    label2 = Label(win_window, text=lines[1], font=("Arial", 20), bg=BACKGROUND_COLOUR)
     label2.pack()
 
     win_window.mainloop()

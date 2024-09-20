@@ -1,7 +1,7 @@
 from tkinter import *
 import random
 
-MINSWAPS = 1
+MINSWAPS = 20
 HEADER_COLOUR = "#ff809d"
 BACKGROUND_COLOUR = "#FFD1DC"
 TILESPERROW = 5
