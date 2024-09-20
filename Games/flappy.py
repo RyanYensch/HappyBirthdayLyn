@@ -9,7 +9,7 @@ GAME_HEIGHT = 700
 BIRD_COLOUR = "orange"
 PIPE_COLOUR = "green"
 STARTX, STARTY = 200, 350
-BIRD_WIDTH, BIRD_HEIGHT = 75, 50
+BIRD_WIDTH, BIRD_HEIGHT = 58, 50
 FLAP_POWER = 30
 GRAVITY_STRENGTH = 1
 TICK_LENGTH = 50
@@ -72,18 +72,20 @@ class FlappyGame():
             self.height = BIRD_HEIGHT
             self.width = BIRD_WIDTH
             self.speed = 0
+            self.image = PhotoImage(file="Images/yippee_cat.png")
             
         def spawn_bird(self):
-            self.body = canvas.create_rectangle(self.coords[0], self.coords[1], 
-                                                self.coords[0] + self.width, self.coords[1] + self.height,
-                                                fill = BIRD_COLOUR, tag="bird")
+            self.body = canvas.create_image(self.coords[0], self.coords[1], image=self.image, anchor="nw", tag="bird")
             
-        def flap(self):
+        def flap(self, flaps = 2):
             canvas.delete(self.body)
-            self.coords[1] -= FLAP_POWER
+            self.coords[1] -= FLAP_POWER/5
             if self.coords[1] < 0: self.coords[1] = 0
-            self.speed = 1
+            self.speed = -3
             self.spawn_bird()
+            if flaps > 0:
+                self.flap(flaps-1)
+
             
         def fall(self):
             canvas.delete(self.body)
