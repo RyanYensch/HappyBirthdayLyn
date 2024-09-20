@@ -1,9 +1,9 @@
 # CoolWebsite
 
-HEY LYN!!!!
+**HEY LYN!!!!**
 
-HAPPY BIRTHDAY <3
-I LOVE YOU :D
+*HAPPY BIRTHDAY <3*
+***I LOVE YOU :D***
 
 Make sure you yhave python installed and tkinter
 To get python:
@@ -23,4 +23,4 @@ pip install tk
 please run the program using this command :)
 ```
 python3 main.py
-``
+```
