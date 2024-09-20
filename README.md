@@ -1,10 +1,26 @@
 # CoolWebsite
-Temp Description
 
+HEY LYN!!!!
 
-create a Prize.txt file in the main folder and add the following:
+HAPPY BIRTHDAY <3
+I LOVE YOU :D
+
+Make sure you yhave python installed and tkinter
+To get python:
 ```
-YOUR GIFT CODE TYPE
-THE GIFT CODE ITSELF e.g. XXXX-XXXX-XXXX-XXXX
+https://www.python.org/downloads/
 ```
-Then replace with your own gift code
+To install tkinter:
+linux/ubuntu:
+```
+sudo apt-get install python3-tk
+```
+windows:
+```
+pip install tk
+```
+
+please run the program using this command :)
+```
+python3 main.py
+``
